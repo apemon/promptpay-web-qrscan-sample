@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+  </head>
+  <body>
+    <div id="message">
+        <input id="file" type="file" accept="image/*"><br>
+        <img id="image"></img>
+    </div>
+    <script type="text/javascript" src="js/jsqrcode/grid.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/version.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/detector.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/formatinf.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/errorlevel.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/bitmat.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/datablock.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/bmparser.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/datamask.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/rsdecoder.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/gf256poly.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/gf256.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/decoder.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/qrcode.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/findpat.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/alignpat.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/databr.js"></script>
+    <script>
+      document.getElementById("file").onchange = function () {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+        // get loaded data and render thumbnail.
+        document.getElementById("image").src = e.target.result;
+        var data = e.target.result;
+        qrcode.decode(data);
+    };
+
+    qrcode.callback = function(decodedData) {
+      alert(decodedData);
+    }
+
+    // read the image file as a data URL.
+    reader.readAsDataURL(this.files[0]);
+    
+};
+    </script>
+  </body>
+</html>
