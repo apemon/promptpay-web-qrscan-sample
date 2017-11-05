@@ -3,13 +3,36 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
+    <title>PromptPay</title>
+    <style>
+      table, th, td {
+          border: 1px solid black;
+      }
+    </style>
   </head>
   <body>
     <div id="message">
         <input id="file" type="file" accept="image/*"><br>
-        <img id="image"></img>
+        <p id="rawData"></p>
+        <table id="table">
+          <tr>
+            <td>Tag</td>
+            <td>Name</td>
+            <td>Data</td>
+          </tr>
+        </table>
+        <table id="merchant">
+          <tr>
+            <td>Promptpay Type</td>
+            <td id="ppType"></td>
+          </tr>
+          <tr>
+            <td>Promptpay Number</td>
+            <td id="ppNumber"></td>
+          </tr>
+        </table>
     </div>
+    <!-- qrcode reader -->
     <script type="text/javascript" src="js/jsqrcode/grid.js"></script>
     <script type="text/javascript" src="js/jsqrcode/version.js"></script>
     <script type="text/javascript" src="js/jsqrcode/detector.js"></script>
@@ -27,19 +50,46 @@
     <script type="text/javascript" src="js/jsqrcode/findpat.js"></script>
     <script type="text/javascript" src="js/jsqrcode/alignpat.js"></script>
     <script type="text/javascript" src="js/jsqrcode/databr.js"></script>
+    <!-- promptpay-emvco-parser -->
+    <script type="text/javascript" src="js/promptpay-emvco-parser/tags.js"></script>
+    <script type="text/javascript" src="js/promptpay-emvco-parser/app.js"></script>
     <script>
       document.getElementById("file").onchange = function () {
     var reader = new FileReader();
 
     reader.onload = function (e) {
         // get loaded data and render thumbnail.
-        document.getElementById("image").src = e.target.result;
         var data = e.target.result;
         qrcode.decode(data);
     };
 
     qrcode.callback = function(decodedData) {
-      alert(decodedData);
+      var rawData = decodedData;
+      // parse promptpay info
+      var promptpayInfo = parse(rawData);
+      var raw = document.getElementById("rawData");
+      raw.innerHTML = "data: " + rawData;
+      var table = document.getElementById("table");
+      // clear old table value
+      table.getElementsByTagName("tbody")[0].innerHTML = table.rows[0].innerHTML;
+      var keys = Object.keys(promptpayInfo);
+      for(var i=0;i<keys.length;i++) {
+        var key = keys[i];
+        var data = promptpayInfo[key];
+        var row = table.insertRow(i+1);
+        var id = row.insertCell(0);
+        id.innerHTML = data.id;
+        var name = row.insertCell(1);
+        name.innerHTML = data.name;
+        var value = row.insertCell(2);
+        value.innerHTML = data.data;
+      }
+      // merchant data
+      var merchantInfo = promptpayInfo.MerchantAccountInformation.merchantInfo;
+      var ppType = document.getElementById("ppType");
+      ppType.innerHTML = merchantInfo.promptpayIdType;
+      var ppNumber = document.getElementById("ppNumber");
+      ppNumber.innerHTML = merchantInfo.promptpayNumber;
     }
 
     // read the image file as a data URL.
