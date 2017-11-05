@@ -1,0 +1,22 @@
+{
+  "name": "promptpay-qr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apemon/promptpay-web-qrscan-sample.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/apemon/promptpay-web-qrscan-sample/issues"
+  },
+  "homepage": "https://github.com/apemon/promptpay-web-qrscan-sample#readme",
+  "dependencies": {
+    "promptpay-emvco-parser": "0.0.2"
+  }
+}
